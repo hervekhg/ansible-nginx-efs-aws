@@ -1,0 +1,18 @@
+---
+# tasks file for install_app (Just for Test)
+- name: Ensure Nginx is Installed
+  package:
+    name : nginx
+    state: installed
+
+- name: Changing default port from 80 to 8080
+  replace:
+    path : /etc/nginx/nginx.conf
+    regexp: '80'
+    replace : '8080'
+    backup: yes
+
+- name: Ensure Nginx is started
+  service:
+    name : nginx
+    state: restarted

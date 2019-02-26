@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  become : yes
+  become : root
+
+  tasks :
+  - name : "Assume role Snapshoter"
+    sts_assume_role :
+      role_arn : "{{role_arn}}"
+      role_session_name: "Biznet-Snapshoter"
+      region : "{{aws_region}}"
+    register: assumed_role
+
+  - name : "Backup Instance"
+    rds :
+      aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+      aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+      security_token: "{{ assumed_role.sts_creds.session_token }}"
+      region : "{{aws_region}}"
+      command : snapshot
+      instance_name : "{{rds_name}}"
+      snapshot : "{{rds_name}}-before-{{version_lot | replace ('.', '-')}}-{{ansible_date_time.epoch}}"
+      wait: yes
+      wait_timeout : 6000
+    register : rds_snapshot

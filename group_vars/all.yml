@@ -1,0 +1,31 @@
+---
+#Connect to Consul
+consul_path: "{{ lookup('env','ANSIBLE_CONSUL_PATH') }}"
+consul_host: "{{ lookup('env','ANSIBLE_CONSUL_HOST') }}"
+consul_port: "{{ lookup('env', 'ANSIBLE_CONSUL_PORT') }}"
+
+#Common
+app_bucket: "mm-mgmt-repo-app"
+
+
+role_arn: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/common/role_arn') }}"
+aws_region: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/common/region') }}"
+
+# AWS VAR à récupére dans consul
+aws_region : "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/common/region') }}"
+efs_file_system_id: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/output/efs_id') }}"
+efs_dns_name: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/output/efs_dns_name') }}"
+rds_name: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/output/rds_name') }}"
+
+
+
+# EC2
+nfs_package : "amazon-efs-utils"
+efs_mount_folder : "/mnt/efs"
+app_directory: "/usr/local/appliMM/"
+log_directory: "/usr/local/log"
+tmp_directory: "{{ app_directory }}/tmp"
+supervision_directory: "{{ app_directory }}/supervision"
+
+#Supervision nagios
+sns_nagios_arn: "{{ lookup('consul_kv', env + '/' + project_name + '/' + install_name + '/terraform/common/sns_nagios_arn') }}"

@@ -1,0 +1,49 @@
+---
+# tasks file for install_ec2
+- name : Ensure NFS Package is installed
+  package :
+    name : "{{ nfs_package }}"
+    state : installed
+
+- name : Create EFS directory
+  file:
+    path : "{{ efs_mount_folder }}"
+    state : directory
+    mode : 0755
+
+- name : Ensure EFS Volume is mounted
+  mount :
+    name : "{{ efs_mount_folder }}"
+    src : "{{ efs_dns_name }}:/"
+    fstype : nfs4
+    opts : nfsvers=4.1
+    state : mounted
+    boot: yes
+
+# Tasks for supervision
+- name: create supervision directory
+  file:
+    path: "{{ supervision_directory }}"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+- name: "get awslogs agent"
+  get_url:
+    url: "https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py"
+    dest: "{{ supervision_directory }}/awslogs-agent-setup.py"
+    mode: "0755"
+
+- name: configure awslogs.conf
+  template:
+    src: "awslogs.conf.j2"
+    dest: "{{ supervision_directory }}/awslogs.conf"
+    owner: root
+    group: root
+
+- name: "setup awslogs agent"
+  shell: "{{ supervision_directory }}/awslogs-agent-setup.py -n -r {{ aws_region }} -c \"{{ supervision_directory }}/awslogs.conf\""
+
+
+# Adding fstab mount for EFS

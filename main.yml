@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: yes
+  roles:
+    - mm.ntp_conf
+    - install_ec2
+    - install_app
+    - { role: mm.awa-agents , mm_domain : "Biznet", mm_subdomain : "Biznet", mm_stack : "{{ install_name }}", mm_envir : "{{ env }}" }

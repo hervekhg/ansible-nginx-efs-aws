@@ -1,0 +1,17 @@
+---
+- src : http://scm.ul.entreprendre.fr/ansible-commons/mm.artifacts_to_s3.git
+  scm: git
+  version: "2.1.0"
+
+- src : http://scm.ul.entreprendre.fr/ansible-commons/mm.ntp_conf.git
+  scm: git
+  version: "1.1.0"
+
+- src : http://scm.ul.entreprendre.fr/ansible-commons/mm.get_ec2_tags.git
+  scm: git
+  version: "1.0.1"
+
+- src : http://scm.ul.entreprendre.fr/ansible-commons/mm.awa-agents.git
+  scm: git
+  version: "1.0.2"
+

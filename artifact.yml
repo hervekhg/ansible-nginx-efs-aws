@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  tasks :
+    - include_role :
+        name : mm.artifacts_to_s3
+      vars:
+        repository: "http://scm.ul.entreprendre.fr/ansible-projects/hervekhg.git"
+        project_name: "hervekhg"
+        git_version: "{{ project_ansible_version }}"
+        version_lot: "{{ my_version_lot }}"
+        archive_name: hervekhg-ansible
+        repository_type: "git"
+        package_type: "application"
+        ansible_root: "."
+        bucket : "{{ app_bucket }}"
